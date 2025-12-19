@@ -5,7 +5,7 @@ import com.example.demo.service.PenaltyCalculationService;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/penalty")
+@RequestMapping("/api/calculations")
 public class PenaltyCalculationController {
 
     private final PenaltyCalculationService service;
@@ -14,8 +14,8 @@ public class PenaltyCalculationController {
         this.service = service;
     }
 
-    @PostMapping("/{contractId}")
-    public PenaltyCalculation calculate(@PathVariable Long contractId) {
-        return service.calculatePenalty(contractId);
+    @PostMapping("/contract/{id}")
+    public PenaltyCalculation calculate(@PathVariable Long id) {
+        return service.calculatePenalty(id);
     }
 }
