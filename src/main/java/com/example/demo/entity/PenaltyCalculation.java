@@ -1,22 +1,72 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
-import lombok.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
-@Getter @Setter @NoArgsConstructor
+@Table(name = "penalty_calculations")
 public class PenaltyCalculation {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @ManyToOne
+    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "contract_id", nullable = false)
     private Contract contract;
-
+    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "delivery_record_id")
+    private DeliveryRecord deliveryRecord;
+    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "breach_rule_id", nullable = false)
+    private BreachRule breachRule;
+    
+    @Column(nullable = false)
     private Integer daysDelayed;
+    
+    @Column(nullable = false, precision = 19, scale = 2)
     private BigDecimal calculatedPenalty;
-    private LocalDateTime calculatedAt = LocalDateTime.now();
+    
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime calculatedAt;
+    
+    public PenaltyCalculation() {}
+    
+    public PenaltyCalculation(Contract contract, DeliveryRecord deliveryRecord, BreachRule breachRule,
+                             Integer daysDelayed, BigDecimal calculatedPenalty) {
+        this.contract = contract;
+        this.deliveryRecord = deliveryRecord;
+        this.breachRule = breachRule;
+        this.daysDelayed = daysDelayed;
+        this.calculatedPenalty = calculatedPenalty;
+    }
+    
+    @PrePersist
+    protected void onCreate() {
+        calculatedAt = LocalDateTime.now();
+    }
+    
+    // Getters and Setters
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+    
+    public Contract getContract() { return contract; }
+    public void setContract(Contract contract) { this.contract = contract; }
+    
+    public DeliveryRecord getDeliveryRecord() { return deliveryRecord; }
+    public void setDeliveryRecord(DeliveryRecord deliveryRecord) { this.deliveryRecord = deliveryRecord; }
+    
+    public BreachRule getBreachRule() { return breachRule; }
+    public void setBreachRule(BreachRule breachRule) { this.breachRule = breachRule; }
+    
+    public Integer getDaysDelayed() { return daysDelayed; }
+    public void setDaysDelayed(Integer daysDelayed) { this.daysDelayed = daysDelayed; }
+    
+    public BigDecimal getCalculatedPenalty() { return calculatedPenalty; }
+    public void setCalculatedPenalty(BigDecimal calculatedPenalty) { this.calculatedPenalty = calculatedPenalty; }
+    
+    public LocalDateTime getCalculatedAt() { return calculatedAt; }
+    public void setCalculatedAt(LocalDateTime calculatedAt) { this.calculatedAt = calculatedAt; }
 }
