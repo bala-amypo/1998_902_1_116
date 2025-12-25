@@ -5,57 +5,17 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "breach_reports")
 public class BreachReport {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "contract_id", nullable = false)
+
+    @ManyToOne
     private Contract contract;
-    
-    @Column(nullable = false)
+
     private Integer daysDelayed;
-    
-    @Column(nullable = false, precision = 19, scale = 2)
     private BigDecimal penaltyAmount;
-    
-    @Column(nullable = false)
     private String reportStatus = "GENERATED";
-    
-    @Column(nullable = false, updatable = false)
-    private LocalDateTime generatedAt;
-    
-    public BreachReport() {}
-    
-    public BreachReport(Contract contract, Integer daysDelayed, BigDecimal penaltyAmount) {
-        this.contract = contract;
-        this.daysDelayed = daysDelayed;
-        this.penaltyAmount = penaltyAmount;
-    }
-    
-    @PrePersist
-    protected void onCreate() {
-        generatedAt = LocalDateTime.now();
-    }
-    
-    // Getters and Setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-    
-    public Contract getContract() { return contract; }
-    public void setContract(Contract contract) { this.contract = contract; }
-    
-    public Integer getDaysDelayed() { return daysDelayed; }
-    public void setDaysDelayed(Integer daysDelayed) { this.daysDelayed = daysDelayed; }
-    
-    public BigDecimal getPenaltyAmount() { return penaltyAmount; }
-    public void setPenaltyAmount(BigDecimal penaltyAmount) { this.penaltyAmount = penaltyAmount; }
-    
-    public String getReportStatus() { return reportStatus; }
-    public void setReportStatus(String reportStatus) { this.reportStatus = reportStatus; }
-    
-    public LocalDateTime getGeneratedAt() { return generatedAt; }
-    public void setGeneratedAt(LocalDateTime generatedAt) { this.generatedAt = generatedAt; }
+    private LocalDateTime generatedAt = LocalDateTime.now();
 }
