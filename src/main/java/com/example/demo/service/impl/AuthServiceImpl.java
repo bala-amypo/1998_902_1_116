@@ -1,30 +1,39 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.dto.*;
+import com.example.demo.dto.AuthRequestDto;
+import com.example.demo.dto.AuthResponseDto;
 import com.example.demo.entity.User;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.security.JwtTokenProvider;
 import com.example.demo.service.AuthService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 public class AuthServiceImpl implements AuthService {
 
-    private final UserRepository repo;
-    private final JwtTokenProvider tokenProvider;
-    private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+    private final UserRepository userRepository;
+    private final JwtTokenProvider jwtTokenProvider;
+    private final PasswordEncoder passwordEncoder;
 
-    public AuthServiceImpl(UserRepository repo, JwtTokenProvider tokenProvider) {
-        this.repo = repo;
-        this.tokenProvider = tokenProvider;
+    public AuthServiceImpl(UserRepository userRepository,
+                           JwtTokenProvider jwtTokenProvider,
+                           PasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
+        this.jwtTokenProvider = jwtTokenProvider;
+        this.passwordEncoder = passwordEncoder;
     }
 
-    public AuthResponseDto login(AuthRequestDto dto) {
-        User user = repo.findByEmail(dto.getEmail()).orElseThrow();
-        if (!encoder.matches(dto.getPassword(), user.getPassword()))
-            throw new RuntimeException("Invalid credentials");
+    @Override
+    public AuthResponseDto login(AuthRequestDto request) {
+        User user = userRepository.findByEmail(request.getEmail())
+                .orElseThrow(() -> new RuntimeException("User not found"));
 
-        return new AuthResponseDto(tokenProvider.generateToken(user.getEmail()));
+        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+            throw new RuntimeException("Invalid credentials");
+        }
+
+        String token = jwtTokenProvider.generateToken(user.getEmail(), user.getRole());
+        return new AuthResponseDto(token, user.getRole());
     }
 }
