@@ -1,23 +1,41 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
-
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Entity
-@Getter
-@Setter
+@Table(name = "breach_reports")
 public class BreachReport {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     private Contract contract;
 
-    private int daysDelayed;
+    private LocalDateTime reportGeneratedAt;
+
+    private Integer daysDelayed;
+
     private BigDecimal penaltyAmount;
+
+    private String remarks;
+
+    @PrePersist
+    public void onCreate() {
+        reportGeneratedAt = LocalDateTime.now();
+    }
+
+    // Getters & Setters
+    public Long getId() { return id; }
+    public Contract getContract() { return contract; }
+    public void setContract(Contract contract) { this.contract = contract; }
+    public Integer getDaysDelayed() { return daysDelayed; }
+    public void setDaysDelayed(Integer daysDelayed) { this.daysDelayed = daysDelayed; }
+    public BigDecimal getPenaltyAmount() { return penaltyAmount; }
+    public void setPenaltyAmount(BigDecimal penaltyAmount) { this.penaltyAmount = penaltyAmount; }
+    public String getRemarks() { return remarks; }
+    public void setRemarks(String remarks) { this.remarks = remarks; }
 }

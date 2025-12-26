@@ -1,23 +1,38 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
-
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
-@Getter
-@Setter
+@Table(name = "delivery_records")
 public class DeliveryRecord {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     private Contract contract;
 
+    @Column(nullable = false)
     private LocalDate deliveryDate;
+
     private String notes;
+
+    private LocalDateTime createdAt;
+
+    @PrePersist
+    public void onCreate() {
+        createdAt = LocalDateTime.now();
+    }
+
+    // Getters & Setters
+    public Long getId() { return id; }
+    public Contract getContract() { return contract; }
+    public void setContract(Contract contract) { this.contract = contract; }
+    public LocalDate getDeliveryDate() { return deliveryDate; }
+    public void setDeliveryDate(LocalDate deliveryDate) { this.deliveryDate = deliveryDate; }
+    public String getNotes() { return notes; }
+    public void setNotes(String notes) { this.notes = notes; }
 }
