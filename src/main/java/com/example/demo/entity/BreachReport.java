@@ -1,10 +1,14 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
 @Entity
+@Getter
+@Setter
 public class BreachReport {
 
     @Id
@@ -14,8 +18,6 @@ public class BreachReport {
     @ManyToOne
     private Contract contract;
 
-    private Integer daysDelayed;
+    private int daysDelayed;
     private BigDecimal penaltyAmount;
-    private String reportStatus = "GENERATED";
-    private LocalDateTime generatedAt = LocalDateTime.now();
 }
