@@ -9,17 +9,17 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class OpenApiConfig {
-
+    
     @Bean
-    public OpenAPI openAPI() {
+    public OpenAPI customOpenAPI() {
         return new OpenAPI()
                 .info(new Info()
                         .title("Contract Breach Penalty Calculator API")
                         .version("1.0")
-                        .description("Manages contracts, breaches and penalties"))
-                .addSecurityItem(new SecurityRequirement().addList("bearerAuth"))
+                        .description("API for managing contracts, deliveries, breach rules, penalties, and reports"))
+                .addSecurityItem(new SecurityRequirement().addList("Bearer Authentication"))
                 .components(new io.swagger.v3.oas.models.Components()
-                        .addSecuritySchemes("bearerAuth",
+                        .addSecuritySchemes("Bearer Authentication",
                                 new SecurityScheme()
                                         .type(SecurityScheme.Type.HTTP)
                                         .scheme("bearer")
