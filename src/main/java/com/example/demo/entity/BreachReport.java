@@ -1,41 +1,37 @@
 package com.example.demo.entity;
 
-import jakarta.persistence.*;
+import lombok.*;
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "breach_reports")
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class BreachReport {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @ManyToOne(optional = false)
+    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "contract_id", nullable = false)
     private Contract contract;
-
-    private LocalDateTime reportGeneratedAt;
-
+    
+    @Column(nullable = false)
     private Integer daysDelayed;
-
+    
+    @Column(nullable = false)
     private BigDecimal penaltyAmount;
-
-    private String remarks;
-
+    
+    @Builder.Default
+    private String reportStatus = "GENERATED";
+    
+    private LocalDateTime generatedAt;
+    
     @PrePersist
-    public void onCreate() {
-        reportGeneratedAt = LocalDateTime.now();
+    protected void onCreate() {
+        generatedAt = LocalDateTime.now();
     }
-
-    // Getters & Setters
-    public Long getId() { return id; }
-    public Contract getContract() { return contract; }
-    public void setContract(Contract contract) { this.contract = contract; }
-    public Integer getDaysDelayed() { return daysDelayed; }
-    public void setDaysDelayed(Integer daysDelayed) { this.daysDelayed = daysDelayed; }
-    public BigDecimal getPenaltyAmount() { return penaltyAmount; }
-    public void setPenaltyAmount(BigDecimal penaltyAmount) { this.penaltyAmount = penaltyAmount; }
-    public String getRemarks() { return remarks; }
-    public void setRemarks(String remarks) { this.remarks = remarks; }
 }
