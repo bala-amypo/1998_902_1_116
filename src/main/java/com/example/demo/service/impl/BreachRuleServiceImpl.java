@@ -17,10 +17,6 @@ public class BreachRuleServiceImpl implements BreachRuleService {
         this.breachRuleRepository = breachRuleRepository;
     }
     
-    public BreachRuleServiceImpl() {
-        this.breachRuleRepository = null;
-    }
-    
     @Override
     public BreachRule createRule(BreachRule rule) {
         if (rule.getPenaltyPerDay().compareTo(BigDecimal.ZERO) <= 0) {
