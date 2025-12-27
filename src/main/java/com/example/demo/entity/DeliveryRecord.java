@@ -1,6 +1,6 @@
 package com.example.demo.entity;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
@@ -22,41 +22,34 @@ public class DeliveryRecord {
     public DeliveryRecord() {
     }
 
-    public DeliveryRecord(Long id, LocalDate deliveryDate, int deliveredQuantity, Contract contract) {
-        this.id = id;
-        this.deliveryDate = deliveryDate;
-        this.deliveredQuantity = deliveredQuantity;
-        this.contract = contract;
-    }
-
     public Long getId() {
         return id;
     }
- 
+
     public void setId(Long id) {
         this.id = id;
     }
- 
+
     public LocalDate getDeliveryDate() {
         return deliveryDate;
     }
- 
+
     public void setDeliveryDate(LocalDate deliveryDate) {
         this.deliveryDate = deliveryDate;
     }
- 
+
     public int getDeliveredQuantity() {
         return deliveredQuantity;
     }
- 
+
     public void setDeliveredQuantity(int deliveredQuantity) {
         this.deliveredQuantity = deliveredQuantity;
     }
- 
+
     public Contract getContract() {
         return contract;
     }
- 
+
     public void setContract(Contract contract) {
         this.contract = contract;
     }
