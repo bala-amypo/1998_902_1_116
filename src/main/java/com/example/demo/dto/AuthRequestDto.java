@@ -5,9 +5,17 @@ public class AuthRequestDto {
     private String email;
     private String password;
 
-    public AuthRequest() {
+    // ✅ No-arg constructor (REQUIRED)
+    public AuthRequestDto() {
     }
 
+    // ✅ Optional constructor (safe to keep)
+    public AuthRequestDto(String email, String password) {
+        this.email = email;
+        this.password = password;
+    }
+
+    // ✅ Getters & Setters (REQUIRED by tests)
     public String getEmail() {
         return email;
     }
