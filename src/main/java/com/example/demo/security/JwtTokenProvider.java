@@ -1,53 +1,52 @@
 package com.example.demo.security;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
+import io.jsonwebtoken.*;
+import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Component;
-
+import java.security.Key;
 import java.util.Date;
-import java.util.function.Function;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Component
 public class JwtTokenProvider {
-
-    private static final String SECRET_KEY = "mysecretkeymysecretkeymysecretkey";
-    private static final long JWT_EXPIRATION = 1000 * 60 * 60; // 1 hour
-
-    public String generateToken(Authentication authentication) {
-
-        UserDetails userPrincipal = (UserDetails) authentication.getPrincipal();
-
+    
+    private String jwtSecret = "mySecretKeyThatIsLongEnoughForJWTSecurityWithHS512Algorithm123456789012345678901234567890";
+    private Long jwtExpirationMs = 86400000L;
+    
+    private Key getSigningKey() {
+        return Keys.hmacShaKeyFor(jwtSecret.getBytes());
+    }
+    
+    public String generateToken(Long userId, String email, Set<String> roles) {
+        Date expiryDate = new Date(System.currentTimeMillis() + jwtExpirationMs);
+        String rolesStr = String.join(",", roles);
+        
         return Jwts.builder()
-                .setSubject(userPrincipal.getUsername())
+                .setSubject(email)
+                .claim("userId", userId)
+                .claim("email", email)
+                .claim("roles", rolesStr)
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + JWT_EXPIRATION))
-                .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
+                .setExpiration(expiryDate)
+                .signWith(getSigningKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
-
-    public String getUsernameFromToken(String token) {
-        return extractClaim(token, Claims::getSubject);
-    }
-
+    
     public boolean validateToken(String token) {
         try {
-            Jwts.parser()
-                .setSigningKey(SECRET_KEY)
-                .parseClaimsJws(token);
+            Jwts.parserBuilder().setSigningKey(getSigningKey()).build().parseClaimsJws(token);
             return true;
-        } catch (Exception ex) {
+        } catch (JwtException | IllegalArgumentException e) {
             return false;
         }
     }
-
-    private <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
-        final Claims claims = Jwts.parser()
-                .setSigningKey(SECRET_KEY)
+    
+    public Claims getClaims(String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(getSigningKey())
+                .build()
                 .parseClaimsJws(token)
                 .getBody();
-        return claimsResolver.apply(claims);
     }
 }
