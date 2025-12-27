@@ -1,60 +1,25 @@
 package com.example.demo.entity;
 
-import jakarta.persistence.*;
+import lombok.*;
+import javax.persistence.*;
+import java.math.BigDecimal;
 
 @Entity
 @Table(name = "breach_rules")
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class BreachRule {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    
+    @Column(unique = true)
     private String ruleName;
-
-    private String conditionType;
-
-    private int threshold;
-
-    public BreachRule() {
-    }
-
-    public BreachRule(Long id, String ruleName, String conditionType, int threshold) {
-        this.id = id;
-        this.ruleName = ruleName;
-        this.conditionType = conditionType;
-        this.threshold = threshold;
-    }
-
-    public Long getId() {
-        return id;
-    }
- 
-    public void setId(Long id) {
-        this.id = id;
-    }
- 
-    public String getRuleName() {
-        return ruleName;
-    }
- 
-    public void setRuleName(String ruleName) {
-        this.ruleName = ruleName;
-    }
- 
-    public String getConditionType() {
-        return conditionType;
-    }
- 
-    public void setConditionType(String conditionType) {
-        this.conditionType = conditionType;
-    }
- 
-    public int getThreshold() {
-        return threshold;
-    }
- 
-    public void setThreshold(int threshold) {
-        this.threshold = threshold;
-    }
+    
+    private BigDecimal penaltyPerDay;
+    private Double maxPenaltyPercentage;
+    private Boolean active;
+    private Boolean isDefaultRule;
 }
