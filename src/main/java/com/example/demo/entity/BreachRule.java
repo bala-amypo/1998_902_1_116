@@ -10,27 +10,19 @@ public class BreachRule {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
     private String ruleName;
 
-    private String description;
+    private String conditionType;
 
-    @Column(nullable = false)
     private int threshold;
 
     public BreachRule() {
     }
 
-    public BreachRule(Long id, String ruleName, String description, int threshold) {
+    public BreachRule(Long id, String ruleName, String conditionType, int threshold) {
         this.id = id;
         this.ruleName = ruleName;
-        this.description = description;
-        this.threshold = threshold;
-    }
-
-    public BreachRule(String ruleName, String description, int threshold) {
-        this.ruleName = ruleName;
-        this.description = description;
+        this.conditionType = conditionType;
         this.threshold = threshold;
     }
 
@@ -50,12 +42,12 @@ public class BreachRule {
         this.ruleName = ruleName;
     }
  
-    public String getDescription() {
-        return description;
+    public String getConditionType() {
+        return conditionType;
     }
  
-    public void setDescription(String description) {
-        this.description = description;
+    public void setConditionType(String conditionType) {
+        this.conditionType = conditionType;
     }
  
     public int getThreshold() {

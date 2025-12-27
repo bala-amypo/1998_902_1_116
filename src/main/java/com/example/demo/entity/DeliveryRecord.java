@@ -1,25 +1,63 @@
 package com.example.demo.entity;
 
-import lombok.*;
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.time.LocalDate;
 
 @Entity
-@Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
+@Table(name = "delivery_records")
 public class DeliveryRecord {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "contract_id", nullable = false)
-    private Contract contract;
-    
-    @Column(nullable = false)
+
     private LocalDate deliveryDate;
-    
-    private String notes;
+
+    private int deliveredQuantity;
+
+    @ManyToOne
+    @JoinColumn(name = "contract_id")
+    private Contract contract;
+
+    public DeliveryRecord() {
+    }
+
+    public DeliveryRecord(Long id, LocalDate deliveryDate, int deliveredQuantity, Contract contract) {
+        this.id = id;
+        this.deliveryDate = deliveryDate;
+        this.deliveredQuantity = deliveredQuantity;
+        this.contract = contract;
+    }
+
+    public Long getId() {
+        return id;
+    }
+ 
+    public void setId(Long id) {
+        this.id = id;
+    }
+ 
+    public LocalDate getDeliveryDate() {
+        return deliveryDate;
+    }
+ 
+    public void setDeliveryDate(LocalDate deliveryDate) {
+        this.deliveryDate = deliveryDate;
+    }
+ 
+    public int getDeliveredQuantity() {
+        return deliveredQuantity;
+    }
+ 
+    public void setDeliveredQuantity(int deliveredQuantity) {
+        this.deliveredQuantity = deliveredQuantity;
+    }
+ 
+    public Contract getContract() {
+        return contract;
+    }
+ 
+    public void setContract(Contract contract) {
+        this.contract = contract;
+    }
 }

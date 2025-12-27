@@ -1,50 +1,61 @@
 package com.example.demo.entity;
 
-import lombok.*;
-import javax.persistence.*;
-import java.math.BigDecimal;
+import jakarta.persistence.*;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Entity
-@Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
+@Table(name = "contracts")
 public class Contract {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
-    @Column(unique = true, nullable = false)
+
     private String contractNumber;
-    
-    @Column(nullable = false)
-    private String title;
-    
-    @Column(nullable = false)
-    private String counterpartyName;
-    
-    @Column(nullable = false)
-    private LocalDate agreedDeliveryDate;
-    
-    @Column(nullable = false)
-    private BigDecimal baseContractValue;
-    
-    @Builder.Default
-    private String status = "ACTIVE";
-    
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
-    
-    @PrePersist
-    protected void onCreate() {
-        createdAt = LocalDateTime.now();
-        updatedAt = LocalDateTime.now();
+
+    private LocalDate startDate;
+
+    private LocalDate endDate;
+
+    public Contract() {
     }
-    
-    @PreUpdate
-    protected void onUpdate() {
-        updatedAt = LocalDateTime.now();
+
+    public Contract(Long id, String contractNumber, LocalDate startDate, LocalDate endDate) {
+        this.id = id;
+        this.contractNumber = contractNumber;
+        this.startDate = startDate;
+        this.endDate = endDate;
+    }
+
+    public Long getId() {
+        return id;
+    }
+ 
+    public void setId(Long id) {
+        this.id = id;
+    }
+ 
+    public String getContractNumber() {
+        return contractNumber;
+    }
+ 
+    public void setContractNumber(String contractNumber) {
+        this.contractNumber = contractNumber;
+    }
+ 
+    public LocalDate getStartDate() {
+        return startDate;
+    }
+ 
+    public void setStartDate(LocalDate startDate) {
+        this.startDate = startDate;
+    }
+ 
+    public LocalDate getEndDate() {
+        return endDate;
+    }
+ 
+    public void setEndDate(LocalDate endDate) {
+        this.endDate = endDate;
     }
 }

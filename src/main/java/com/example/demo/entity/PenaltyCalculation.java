@@ -1,42 +1,62 @@
 package com.example.demo.entity;
 
-import lombok.*;
-import javax.persistence.*;
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import jakarta.persistence.*;
 
 @Entity
-@Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
+@Table(name = "penalty_calculations")
 public class PenaltyCalculation {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "contract_id", nullable = false)
+
+    private double penaltyAmount;
+
+    private String reason;
+
+    @ManyToOne
+    @JoinColumn(name = "contract_id")
     private Contract contract;
-    
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "delivery_record_id")
-    private DeliveryRecord deliveryRecord;
-    
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "breach_rule_id", nullable = false)
-    private BreachRule breachRule;
-    
-    @Column(nullable = false)
-    private Integer daysDelayed;
-    
-    @Column(nullable = false)
-    private BigDecimal calculatedPenalty;
-    
-    private LocalDateTime calculatedAt;
-    
-    @PrePersist
-    protected void onCreate() {
-        calculatedAt = LocalDateTime.now();
+
+    public PenaltyCalculation() {
+    }
+
+    public PenaltyCalculation(Long id, double penaltyAmount, String reason, Contract contract) {
+        this.id = id;
+        this.penaltyAmount = penaltyAmount;
+        this.reason = reason;
+        this.contract = contract;
+    }
+
+    public Long getId() {
+        return id;
+    }
+ 
+    public void setId(Long id) {
+        this.id = id;
+    }
+ 
+    public double getPenaltyAmount() {
+        return penaltyAmount;
+    }
+ 
+    public void setPenaltyAmount(double penaltyAmount) {
+        this.penaltyAmount = penaltyAmount;
+    }
+ 
+    public String getReason() {
+        return reason;
+    }
+ 
+    public void setReason(String reason) {
+        this.reason = reason;
+    }
+ 
+    public Contract getContract() {
+        return contract;
+    }
+ 
+    public void setContract(Contract contract) {
+        this.contract = contract;
     }
 }
